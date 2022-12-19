@@ -1,35 +1,33 @@
 # Model title
 
 ## Model identifiers
-- Slug: <add_slug_here>
-- Ersilia ID: <add_ersilia_id_here>
-- Tags: <add_tags_here>
+
+- Slug: crem-structure-generation
+- Ersilia ID: eos4q1a
+- Tags: generative, fragment-based, rule-based
 
 ## Model description
 
-Short description of the model in one or two sentences
+The framework is an open source implementation of fragment based generative approaches for exploring chemical space while ensuring chemical validity. This framework utilizes a database of known compounds to come up with interchangable fragments based on the context radius of an input molecule to generate new molecule
 
-- Input:
-- Output: {unit and description of output) 
-- Model type: (Regression or Classification)
-- Training set: (number of compounds and link to the training data)
-- Mode of training: (is it pretrained? that is were the checkpoints downloaded and used to train the model? or is it retrained? that is trained from scratch with an updated data)
+- Input: SMILES
+- Output: SMILES
+- Model type: Rule-based generative model
 
 ## Source code
 
-Cite the source publication
+This framework has been published by Polishchuk, P. CReM: chemically reasonable mutations framework for structure generation. J Cheminform 12, 28 (2020). DOI: [https://doi.org/10.1186/s13321-020-00431-w](https://doi.org/10.1186/s13321-020-00431-w)
 
-- Code: include link to the source code
-- Checkpoints: include the link to the checkpoints used if model is a pretrained model
+- [Code](https://github.com/DrrDom/crem) and [Documentation](https://crem.readthedocs.io/en/latest/)
+- Fragment database: replacements02_sc2.db - [database](lhttp://www.qsar4u.com/pages/crem.php) created from ChEMBL v22 structures which contain only organic atoms (C,N,O,S,P,F,Cl,Br,I) and have maximum synthetic complexity score (SCScore) 2.
 
 ## License
 
-State the licences used which are GPL v3 license used by Ersilia and the license used by the source code, if any exists. Use [this guide]() on how to license new models to be incorporated into Ersilia's model hub 
+The BSD 3-Clause License applies to all parts of this repository.
 
 ## History
 
-- State the date when the model was downloaded and incorporated into Ersilia.
-- List any essential steps/modifications to the original code
+Model was incorporateed on December 19, 2022.
 
 ## About us
 
