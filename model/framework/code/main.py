@@ -1,10 +1,11 @@
 # imports
 import os
 import csv
-import joblib
 import sys
+from typing import List
+
 from rdkit import Chem
-from rdkit.Chem.Descriptors import MolWt
+from crem.crem import mutate_mol
 
 # parse arguments
 input_file = sys.argv[1]
@@ -14,14 +15,19 @@ output_file = sys.argv[2]
 root = os.path.dirname(os.path.abspath(__file__))
 
 # checkpoints directory
-checkpoints_dir = os.path.abspath(os.path.join(root, "..", "..", "checkpoints"))
+database_dir = os.path.abspath(os.path.join(root, "..", "..", "databases"))
 
 # read checkpoints (here, simply an integer number: 42)
-ckpt = joblib.load(os.path.join(checkpoints_dir, "checkpoints.joblib"))
+database_path = os.path.join(database_dir, "replacements02_sc2.db")
 
 # model to be run (here, calculate the Molecular Weight and add ckpt (42) to it)
-def my_model(smiles_list, ckpt):
-    return [MolWt(Chem.MolFromSmiles(smi))+ckpt for smi in smiles_list]
+def my_model(smiles_list: List[str], database_path: str) -> List[List[str]]:
+    generated_smiles = list()
+    input_mols = [Chem.MolFromSmiles(smi) for smi in smiles_list]
+    for mol in input_mols:
+        generated_smiles.append(list(mutate_mol(mol=mol, db_name=database_path)))
+    
+    return generated_smiles
     
 # read SMILES from .csv file, assuming one column with header
 with open(input_file, "r") as f:
@@ -30,11 +36,11 @@ with open(input_file, "r") as f:
     smiles_list = [r[0] for r in reader]
     
 # run model
-outputs = my_model(smiles_list, ckpt)
+outputs = my_model(smiles_list, database_path)
 
 # write output in a .csv file
 with open(output_file, "w") as f:
     writer = csv.writer(f)
     writer.writerow(["value"]) # header
     for o in outputs:
-        writer.writerow([o])
+        writer.writerow(o)
