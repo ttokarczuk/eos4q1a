@@ -13,12 +13,12 @@ import tempfile
 import subprocess
 import csv
 
-CHECKPOINTS_BASEDIR = "checkpoints"
+DATABASES_BASEDIR = "databases"
 FRAMEWORK_BASEDIR = "framework"
 
-def load_model(framework_dir, checkpoints_dir):
+def load_model(framework_dir, databases_dir):
     mdl = Model()
-    mdl.load(framework_dir, checkpoints_dir)
+    mdl.load(framework_dir, databases_dir)
     return mdl
 
 def Float(x):
@@ -49,12 +49,12 @@ class Model(object):
         self.RUN_FILE = "_run.sh"
         self.LOG_FILE = "run.log"
 
-    def load(self, framework_dir, checkpoints_dir):
+    def load(self, framework_dir, databases_dir):
         self.framework_dir = framework_dir
-        self.checkpoints_dir = checkpoints_dir
+        self.databases_dir = databases_dir
 
-    def set_checkpoints_dir(self, dest):
-        self.checkpoints_dir = os.path.abspath(dest)
+    def set_databases_dir(self, dest):
+        self.databases_dir = os.path.abspath(dest)
 
     def set_framework_dir(self, dest):
         self.framework_dir = os.path.abspath(dest)
@@ -106,9 +106,9 @@ class Artifact(BentoServiceArtifact):
         self._model = None
         self._extension = ".pkl"
 
-    def _copy_checkpoints(self, base_path):
-        src_folder = self._model.checkpoints_dir
-        dst_folder = os.path.join(base_path, "checkpoints")
+    def _copy_databases(self, base_path):
+        src_folder = self._model.databases_dir
+        dst_folder = os.path.join(base_path, "databases")
         if os.path.exists(dst_folder):
             os.rmdir(dst_folder)
         shutil.copytree(src_folder, dst_folder)
@@ -130,8 +130,8 @@ class Artifact(BentoServiceArtifact):
     def load(self, path):
         model_file_path = self._model_file_path(path)
         model = pickle.load(open(model_file_path, "rb"))
-        model.set_checkpoints_dir(
-            os.path.join(os.path.dirname(model_file_path), "checkpoints")
+        model.set_databases_dir(
+            os.path.join(os.path.dirname(model_file_path), "databases")
         )
         model.set_framework_dir(
             os.path.join(os.path.dirname(model_file_path), "framework")
@@ -142,7 +142,7 @@ class Artifact(BentoServiceArtifact):
         return self._model
 
     def save(self, dst):
-        self._copy_checkpoints(dst)
+        self._copy_databases(dst)
         self._copy_framework(dst)
         pickle.dump(self._model, open(self._model_file_path(dst), "wb"))
 
