@@ -31,7 +31,7 @@ def generate_fingerprint(mol: rdkit.Chem.rdchem.Mol, nbits, radius=3) -> np.ndar
     Return Morgan Fingerprint for a molecule as a fixed shape Numpy array.
 
     Args:
-        mol (rdkit.Chem.rdchem.Mol): RDKit Mol object
+        mol (rdkit.Chem.rdchem.Mol): RDKit Chem.rdchem.Mol object
 
     Returns:
         np.ndarray: Morgan Fingerprint as numpy.ndarray
@@ -97,8 +97,13 @@ def my_model(smiles_list: List[str], database_path: str) -> List[List[str]]:
             set(mutation_result + growth_result)
         )  # Keep unique smiles
 
-        if len(generated_smiles) > 100:
+        num_generated_smiles = len(generated_smiles)
+
+        # Keep consistent structure in generated data
+        if num_generated_smiles > 100:
             generated_smiles = sample_molecules(smiles=generated_smiles)
+        elif num_generated_smiles < 100:
+            generated_smiles = generated_smiles + [" "]*(100-num_generated_smiles)
 
         output_smiles.append(generated_smiles)
 
@@ -116,6 +121,6 @@ outputs = my_model(smiles_list, database_path)
 # write output in a .csv file
 with open(output_file, "w") as f:
     writer = csv.writer(f)
-    writer.writerow(["generated_molecules"])  # header
+    writer.writerow([f"gen_mol_{i}" for i in range(100)])  # header
     for o in outputs:
         writer.writerow(o)
