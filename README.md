@@ -1,4 +1,4 @@
-# Model title
+# CReM: Chemically Reasonable Mutations Framework for Structure Generation
 
 ## Model identifiers
 
