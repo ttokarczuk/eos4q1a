@@ -8,7 +8,7 @@
 
 ## Model description
 
-The framework is an open source implementation of fragment based generative approaches for exploring chemical space while ensuring chemical validity. This framework utilizes a database of known compounds to come up with interchangable fragments based on the context radius of an input molecule to generate new molecule
+The framework is an open source implementation of fragment based generative approaches for exploring chemical space while ensuring chemical validity. This framework utilizes a database of known compounds to come up with interchangable fragments based on the context radius of an input molecule to generate new molecules. The generated molecules vary across inputs by order of 1000s. For sake of simplicity, for such molecules generating over 100 molecules, only 100 diverse molecules are returned in the output. This selection is done using mini batch K Means clustering with 100 clusters and molecules closest to the centroid in each cluster are returned.  
 
 - Input: SMILES
 - Output: SMILES
